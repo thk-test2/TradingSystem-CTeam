@@ -21,14 +21,14 @@ public:
     AutoTradingSystem system{ &mockDriver };
 };
 
-TEST_F(AutoTradingSystemTestFixture, SelectStockBrockerFail) {
-    EXPECT_THROW(system.selectStockBrocker("invalid_name"),
+TEST_F(AutoTradingSystemTestFixture, SelectStockBrokerFail) {
+    EXPECT_THROW(system.selectStockBroker("invalid_name"),
         std::invalid_argument);
 }
 
-TEST_F(AutoTradingSystemTestFixture, SelectStockBrockerSuccess) {
-    EXPECT_NO_THROW(system.selectStockBrocker("kiwer"));
-    EXPECT_NO_THROW(system.selectStockBrocker("nemo"));
+TEST_F(AutoTradingSystemTestFixture, SelectStockBrokerSuccess) {
+    EXPECT_NO_THROW(system.selectStockBroker("kiwer"));
+    EXPECT_NO_THROW(system.selectStockBroker("nemo"));
 }
 
 TEST_F(AutoTradingSystemTestFixture, LoginPASS) {

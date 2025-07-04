@@ -6,6 +6,9 @@
 #include <chrono>
 #include <vector>
 #include <windows.h>
+#include "driver_interface.h"
+#include "kiwer_driver.cpp"
+#include "nemo_driver.cpp"
 
 class DriverNullPointerException : public std::exception {
 public:
@@ -21,20 +24,21 @@ public:
     }
 };
 
-//Interface Class
-class StockBrokerDriverInterface {
-public:
-    virtual void login(const std::string& id, const std::string& password) = 0;
-    virtual void buy(const std::string& stockCode, int count, int price) = 0;
-    virtual void sell(const std::string& stockCode, int count, int price) = 0;
-    virtual int currentPrice(const std::string& stockCode) = 0;
-};
-
 class AutoTradingSystem {
 public:
     AutoTradingSystem(StockBrokerDriverInterface* driver) : m_driver{ driver } {}
 
-    void selectStockBrocker(std::string name) { }
+    void selectStockBroker(std::string name) {
+        if (name == "kiwer") {
+            m_driver = new KiwerDriver();
+        }
+        else if (name == "nemo") {
+            m_driver = new NemoDriver();
+        }
+        else {
+            throw std::invalid_argument("Unknown broker");
+        }
+    }
 
     void login(const std::string& id, const std::string& password) {
         if (isDriverNullPointer()) throw DriverNullPointerException();
