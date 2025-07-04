@@ -66,7 +66,7 @@ public:
     }
 
     bool sellNiceTiming(const std::string& stockCode, int numOfStocks) {
-        if (!checkDriverIsSelected()) throw std::exception();
+        if (isDriverNullPointer()) throw std::exception();
 
         int order_price= 0 ;
         if (! isSellTimingAndGetOrderPrice(stockCode, order_price)) {
