@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <exception>
 #include <thread>
@@ -33,9 +35,13 @@ public:
 
 class AutoTradingSystem {
 public:
-    AutoTradingSystem(StockBrokerDriverInterface* driver) : m_driver{ driver } {}
+    AutoTradingSystem() {}
 
-    void selectStockBrocker(std::string name) {}
+    AutoTradingSystem(StockBrokerDriverInterface* mockDriver) : m_driver{ mockDriver } {}
+
+    void selectStockBrocker(StockBrokerDriverInterface* mockDriver) {
+        m_driver = mockDriver;
+    }
 
     void login(const std::string& id, const std::string& password) {
         if (isDriverNullPointer()) throw DriverNullPointerException();
@@ -135,6 +141,6 @@ private:
         m_driver->buy(stockCode, count, currentPrice);
     }
 
-    StockBrokerDriverInterface* m_driver;
+    StockBrokerDriverInterface* m_driver = nullptr;
 	const int MAX_BUY_CHECK_COUNT = 3;
 };
