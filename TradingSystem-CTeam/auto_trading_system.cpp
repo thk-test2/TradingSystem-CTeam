@@ -44,22 +44,11 @@ public:
     bool sellNiceTiming(const std::string& stockCode, int numOfStocks) {
         if (!checkDriverIsSelected()) throw std::exception();
 
-        std::vector<int> nums;
+        std::vector<int> prices = getPrice3Times(stockCode);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        nums.push_back(m_driver->currentPrice(stockCode));
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        nums.push_back(m_driver->currentPrice(stockCode));
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        nums.push_back(m_driver->currentPrice(stockCode));
-
-        if (nums[0] > nums[1]) {
-            if (nums[1] > nums[2]) {
-                this->sell(stockCode, numOfStocks, nums[2]);
-                return true;
-            }
+        if (isSellTiming(prices)) {
+            this->sell(stockCode, numOfStocks, prices[2]);
+            return true;
         }
 
         return false;
@@ -69,6 +58,25 @@ private:
     bool checkDriverIsSelected()
     {
         return m_driver != nullptr;
+    }
+
+    std::vector<int> getPrice3Times(const std::string& stockCode)
+    {
+        std::vector<int> result;
+        for (int i = 0; i < 3; i++) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            result.push_back(m_driver->currentPrice(stockCode));
+        }
+        return result;
+    }
+
+    bool isSellTiming(const std::vector<int>& prices) {
+        if (prices[0] > prices[1]) {
+            if (prices[1] > prices[2]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     StockBrokerDriverInterface* m_driver;
