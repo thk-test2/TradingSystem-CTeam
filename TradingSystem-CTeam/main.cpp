@@ -66,9 +66,11 @@ TEST(AutoTradingSystem, BuyNiceTimingFail) {
         .WillOnce(Return(200))
         .WillOnce(Return(100));
 
-    bool actual = system.buyNiceTiming("TSLA", 100000);
+	// 가격 상승 추세가 아니므로 매수가 발생하지 않음
+    EXPECT_CALL(driver, buy(_, _, _))
+		.Times(0);
 
-    EXPECT_EQ(false, actual);
+    system.buyNiceTiming("TSLA", 100000);
 }
 
 TEST(AutoTradingSystem, BuyNiceTimingSuccess) {
@@ -81,9 +83,10 @@ TEST(AutoTradingSystem, BuyNiceTimingSuccess) {
         .WillOnce(Return(200))
         .WillOnce(Return(300));
 
-    bool actual = system.buyNiceTiming("TSLA", 100000);
+	// 가격 상승 추세이므로 매수가 333건 발생함
+    EXPECT_CALL(driver, buy("TSLA", 333, 300));
 
-    EXPECT_EQ(true, actual);
+    system.buyNiceTiming("TSLA", 100000);
 }
 
 TEST(AutoTradingSystem, SellNiceTimingFail) {
