@@ -11,6 +11,9 @@ public:
 	void buy(const std::string& stockCode, int count, int price) {
 		kiwerAPI.buy(stockCode, count, price);
 	}
+	void sell(const std::string& stockCode, int count, int price) {
+		kiwerAPI.sell(stockCode, count, price);
+	}
 private:
 	KiwerAPI kiwerAPI;
 };

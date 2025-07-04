@@ -30,6 +30,9 @@
     <ClCompile Include="kiwer_driver.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="nemo_driver.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

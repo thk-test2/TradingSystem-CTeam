@@ -11,6 +11,9 @@ public:
 	void buy(const std::string& stockCode, int count, int price) {
 		nemoAPI.purchasingStock(stockCode, price, count);
 	}
+	void sell(const std::string& stockCode, int count, int price) {
+		nemoAPI.sellingStock(stockCode, count, price);
+	}
 private:
 	NemoAPI nemoAPI;
 };
