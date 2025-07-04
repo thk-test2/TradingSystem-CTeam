@@ -69,7 +69,7 @@ public:
 private:
     bool checkDriverIsValidPrice(int price)
     {
-        return price < MIN_STOCK_PRICE || price > MAX_STOCK_PRICE;
+        return (price >= MIN_STOCK_PRICE && price < MAX_STOCK_PRICE);
     }
 
     bool checkDriverIsSelected()
