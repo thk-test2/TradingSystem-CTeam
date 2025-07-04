@@ -37,35 +37,14 @@ public:
         return m_driver->currentPrice(stockCode);
     }
 
-    void buyNiceTiming(string stockCode, int price) {
-        // 200ms 주기로 3회 가격을 확인
-        // 가격이 올라가는 추세라면, 총 금액을 최대한 사용하여 주식 구매
-        // 마지막에 읽은 가격으로 매수
-		int currentPrice = 0;
-		int previousPrice = 0;
-		int increaseCount = 0;
-        for (int checkCnt = 0; checkCnt < MAX_BUY_CHECK_COUNT; checkCnt++)
-        {
-			currentPrice = m_driver->currentPrice(stockCode);
-            if (checkCnt == 0) {
-				previousPrice = currentPrice;
-            }
-            else if (previousPrice < currentPrice) {
-				increaseCount++;
-                previousPrice = currentPrice;
-			}
-			Sleep(200); // 200ms 대기
+    bool buyNiceTiming(const std::string& stockCode, int price) {
+		int currentPrice;
 
+        if (isBuyTiming(&currentPrice, stockCode)) {
+			fullBuy(stockCode, price, currentPrice);
+			return true;
         }
-        // 매수 로직
-        if (increaseCount == MAX_BUY_CHECK_COUNT - 1) {
-            // 가격이 계속 상승하는 추세라면
-            int totalMoney = price; // 총 금액
-            int count = totalMoney / currentPrice; // 구매 가능한 주식 수
-            if (count > 0) {
-                m_driver->buy(stockCode, count, currentPrice);
-            }
-        }
+        return false;
     }
 
     bool sellNiceTiming(const std::string& stockCode, int price) {
@@ -76,6 +55,34 @@ private:
     bool checkDriverIsSelected()
     {
         return m_driver != nullptr;
+    }
+
+    bool isBuyTiming(int* currentPrice, const std::string& stockCode)
+    {
+        int previousPrice = 0;
+        int increaseCount = 0;
+
+        for (int checkCnt = 0; checkCnt < MAX_BUY_CHECK_COUNT; checkCnt++)
+        {
+            *currentPrice = m_driver->currentPrice(stockCode);
+            if (checkCnt == 0) {
+                previousPrice = *currentPrice;
+            }
+            else if (previousPrice < *currentPrice) {
+                increaseCount++;
+                previousPrice = *currentPrice;
+            }
+            else {
+                return false;
+            }
+            Sleep(200);
+        }
+        return true;
+    }
+
+    void fullBuy(const std::string& stockCode, int price, int currentPrice) {
+        int count = price / currentPrice;
+        m_driver->buy(stockCode, count, currentPrice);
     }
 
     StockBrokerDriverInterface* m_driver;
