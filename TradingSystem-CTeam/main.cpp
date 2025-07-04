@@ -22,55 +22,50 @@ public:
     MOCK_METHOD(int, currentPrice, (const std::string& stockCode), (override));
 };
 
-//TEST(StockBroker, SelectStockBrokerKiwer) {
-//    StockBrocker sb;
-//
-//    sb.selectStockBrocker("kiwer");
-//    std::string actual = sb.getStockBrocker();
-//
-//    EXPECT_EQ("kiwer", actual);
-//}
-//
-//TEST(StockBroker, SelectStockBrokerNemo) {
-//    StockBrocker sb;
-//
-//    sb.selectStockBrocker("nemo");
-//    std::string actual = sb.getStockBrocker();
-//
-//    EXPECT_EQ("nemo", actual);
-//}
-
-TEST(StockBroker, LoginFailWithWrongPassword) {
+TEST(AutoTradingSystem, LoginFailWithWrongPassword) {
     MockDriver driver;
+    AutoTradingSystem system{ &driver };
 
-    driver.login("FAKE_USER", "WRONG_PASSWORD");
+    bool actual = system.login("FAKE_USER", "WRONG_PASSWORD");
+
+    EXPECT_EQ(false, actual);
 }
 
-TEST(StockBroker, LoginKiwerPASSWithCorrectPassword) {
+TEST(AutoTradingSystem, LoginPASSWithCorrectPassword) {
     MockDriver driver;
+    AutoTradingSystem system{ &driver };
 
-    driver.login("FAKE_USER", "CORRECT_PASSWORD");
+    bool actual = system.login("FAKE_USER", "CORRECT_PASSWORD");
+
+    EXPECT_EQ(true, actual);
 }
 
-TEST(StockBroker, BuySuccess) {
+TEST(AutoTradingSystem, BuySuccess) {
     MockDriver driver;
+    AutoTradingSystem system{ &driver };
 
-    driver.buy("TSLA", 999, 100);
+    bool actual = system.buy("TSLA", 999, 100);
+
+    EXPECT_EQ(true, actual);
 }
 
-TEST(StockBroker, SellSuccess) {
+TEST(AutoTradingSystem, SellSuccess) {
     MockDriver driver;
+    AutoTradingSystem system{ &driver };
 
-    driver.sell("TSLA", 999, 50);
+    bool actual = system.sell("TSLA", 999, 100);
+
+    EXPECT_EQ(true, actual);
 }
 
-TEST(StockBroker, CurrentPrice) {
+TEST(AutoTradingSystem, GetPrice) {
     MockDriver driver;
+    AutoTradingSystem system{ &driver };
 
     EXPECT_CALL(driver, currentPrice("TSLA"))
         .WillRepeatedly(Return(999));
 
-    int actual = driver.currentPrice("TSLA");
+    int actual = system.getPrice("TSLA");
 
     EXPECT_EQ(999, actual);
 }
