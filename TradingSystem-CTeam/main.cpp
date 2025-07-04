@@ -93,6 +93,36 @@ TEST(AutoTradingSystem, BuyNiceTimingSuccess) {
     EXPECT_EQ(true, actual);
 }
 
+TEST(AutoTradingSystem, SellNiceTimingFail) {
+    MockDriver driver;
+    AutoTradingSystem system{ &driver };
+
+    EXPECT_CALL(driver, currentPrice("TSLA"))
+        .Times(3)
+        .WillOnce(Return(300))
+        .WillOnce(Return(200))
+        .WillOnce(Return(300));
+
+    bool actual = system.sellNiceTiming("TSLA", 10);
+
+    EXPECT_EQ(false, actual);
+}
+
+TEST(AutoTradingSystem, SellNiceTimingSuccess) {
+    MockDriver driver;
+    AutoTradingSystem system{ &driver };
+
+    EXPECT_CALL(driver, currentPrice("TSLA"))
+        .Times(3)
+        .WillOnce(Return(300))
+        .WillOnce(Return(200))
+        .WillOnce(Return(100));
+
+    bool actual = system.sellNiceTiming("TSLA", 10);
+
+    EXPECT_EQ(true, actual);
+}
+
 int main() {
     ::testing::InitGoogleMock();
     return RUN_ALL_TESTS();
