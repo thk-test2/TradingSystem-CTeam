@@ -1,6 +1,9 @@
 
 #include <string>
 #include <exception>
+#include <thread>
+#include <chrono>
+#include <vector>
 
 //Interface Class
 class StockBrokerDriverInterface {
@@ -39,7 +42,27 @@ public:
         return false;
     }
 
-    bool sellNiceTiming(const std::string& stockCode, int price) {
+    bool sellNiceTiming(const std::string& stockCode, int numOfStocks) {
+        if (!checkDriverIsSelected()) throw std::exception();
+
+        std::vector<int> nums;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        nums.push_back(m_driver->currentPrice(stockCode));
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        nums.push_back(m_driver->currentPrice(stockCode));
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        nums.push_back(m_driver->currentPrice(stockCode));
+
+        if (nums[0] > nums[1]) {
+            if (nums[1] > nums[2]) {
+                this->sell(stockCode, numOfStocks, nums[2]);
+                return true;
+            }
+        }
+
         return false;
     }
 
