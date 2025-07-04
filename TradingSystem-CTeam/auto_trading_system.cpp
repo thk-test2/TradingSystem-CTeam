@@ -32,10 +32,10 @@ public:
 
 class AutoTradingSystem {
 public:
-    AutoTradingSystem(StockBrokerDriverInterface* mockDriver) : m_driver{ mockDriver } {}
+    AutoTradingSystem(StockBrokerDriverInterface* driver) : m_driver{ driver } {}
 
-    void selectStockBrocker(StockBrokerDriverInterface* mockDriver) {
-        m_driver = mockDriver;
+    void selectStockBrocker(StockBrokerDriverInterface* driver) {
+        m_driver = driver;
     }
 
     void login(const std::string& id, const std::string& password) {
