@@ -1,4 +1,3 @@
-
 #include <string>
 
 //Interface Class
@@ -20,8 +19,8 @@ public:
         return false;
     }
 
-    bool buy(const std::string& stockCode, int count, int price) {
-        return false;
+    void buy(const std::string& stockCode, int count, int price) {
+        m_driver->buy(stockCode, count, price);
     }
 
     bool sell(const std::string& stockCode, int count, int price) {
