@@ -67,9 +67,12 @@ TEST(AutoTradingSystem, BuyNiceTimingFail) {
         .WillOnce(Return(200))
         .WillOnce(Return(100));
 
-    bool actual = system.buyNiceTiming("TSLA", 100000);
+    EXPECT_CALL(driver, buy(_, _, _))
+		.Times(0);
 
-    EXPECT_EQ(false, actual);
+    bool result = system.buyNiceTiming("TSLA", 100000);
+
+	EXPECT_EQ(false, result);
 }
 
 TEST(AutoTradingSystem, BuyNiceTimingSuccess) {
@@ -82,9 +85,11 @@ TEST(AutoTradingSystem, BuyNiceTimingSuccess) {
         .WillOnce(Return(200))
         .WillOnce(Return(300));
 
-    bool actual = system.buyNiceTiming("TSLA", 100000);
+    EXPECT_CALL(driver, buy("TSLA", 333, 300));
 
-    EXPECT_EQ(true, actual);
+    bool result = system.buyNiceTiming("TSLA", 100000);
+
+	EXPECT_EQ(true, result);
 }
 
 TEST(AutoTradingSystem, SellNiceTimingFail) {

@@ -62,6 +62,12 @@ public:
     }
 
     bool buyNiceTiming(const std::string& stockCode, int price) {
+		int currentPrice;
+
+        if (isBuyTiming(&currentPrice, stockCode)) {
+			fullBuy(stockCode, price, currentPrice);
+			return true;
+        }
         return false;
     }
 
@@ -100,5 +106,34 @@ private:
         return true;
     }
 
+    bool isBuyTiming(int* currentPrice, const std::string& stockCode)
+    {
+        int previousPrice = 0;
+        int increaseCount = 0;
+
+        for (int checkCnt = 0; checkCnt < MAX_BUY_CHECK_COUNT; checkCnt++)
+        {
+            *currentPrice = m_driver->currentPrice(stockCode);
+            if (checkCnt == 0) {
+                previousPrice = *currentPrice;
+            }
+            else if (previousPrice < *currentPrice) {
+                increaseCount++;
+                previousPrice = *currentPrice;
+            }
+            else {
+                return false;
+            }
+            Sleep(200);
+        }
+        return true;
+    }
+
+    void fullBuy(const std::string& stockCode, int price, int currentPrice) {
+        int count = price / currentPrice;
+        m_driver->buy(stockCode, count, currentPrice);
+    }
+
     StockBrokerDriverInterface* m_driver;
+	const int MAX_BUY_CHECK_COUNT = 3;
 };
