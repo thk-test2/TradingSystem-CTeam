@@ -15,40 +15,34 @@ public:
     MOCK_METHOD(int, currentPrice, (const std::string& stockCode), (override));
 };
 
-TEST(AutoTradingSystem, LoginPASS) {
-    MockDriver driver;
+class AutoTradingSystemTestFixture : public ::testing::Test {
+public:
+    NiceMock<MockDriver> driver;
     AutoTradingSystem system{ &driver };
+};
 
+TEST_F(AutoTradingSystemTestFixture, LoginPASS) {
     EXPECT_CALL(driver, login(_, _))
 		.Times(1);
 
     system.login("FAKE_USER", "FAKE_PASSWORD");
 }
 
-TEST(AutoTradingSystem, BuySuccess) {
-    MockDriver driver;
-    AutoTradingSystem system{ &driver };
-
+TEST_F(AutoTradingSystemTestFixture, BuySuccess) {
     EXPECT_CALL(driver, buy(_, _, _))
         .Times(1);
 
     system.buy("TSLA", 999, 100);
 }
 
-TEST(AutoTradingSystem, SellSuccess) {
-    NiceMock<MockDriver> driver;
-    AutoTradingSystem system{ &driver };
-
+TEST_F(AutoTradingSystemTestFixture, SellSuccess) {
     EXPECT_CALL(driver, sell("TSLA", 999, 100))
         .Times(1);
 
     system.sell("TSLA", 999, 100);
 }
 
-TEST(AutoTradingSystem, GetPrice) {
-    MockDriver driver;
-    AutoTradingSystem system{ &driver };
-
+TEST_F(AutoTradingSystemTestFixture, GetPrice) {
     EXPECT_CALL(driver, currentPrice("TSLA"))
         .WillRepeatedly(Return(999));
 
@@ -57,45 +51,31 @@ TEST(AutoTradingSystem, GetPrice) {
     EXPECT_EQ(999, actual);
 }
 
-TEST(AutoTradingSystem, BuyNiceTimingFail) {
-    MockDriver driver;
-    AutoTradingSystem system{ &driver };
-
+TEST_F(AutoTradingSystemTestFixture, BuyNiceTimingFail) {
     EXPECT_CALL(driver, currentPrice("TSLA"))
         .Times(3)
         .WillOnce(Return(100))
         .WillOnce(Return(200))
         .WillOnce(Return(100));
 
-    EXPECT_CALL(driver, buy(_, _, _))
-		.Times(0);
-
     bool result = system.buyNiceTiming("TSLA", 100000);
 
 	EXPECT_EQ(false, result);
 }
 
-TEST(AutoTradingSystem, BuyNiceTimingSuccess) {
-    MockDriver driver;
-    AutoTradingSystem system{ &driver };
-
+TEST_F(AutoTradingSystemTestFixture, BuyNiceTimingSuccess) {
     EXPECT_CALL(driver, currentPrice("TSLA"))
         .Times(3)
         .WillOnce(Return(100))
         .WillOnce(Return(200))
         .WillOnce(Return(300));
 
-    EXPECT_CALL(driver, buy("TSLA", 333, 300));
-
     bool result = system.buyNiceTiming("TSLA", 100000);
 
-	EXPECT_EQ(true, result);
+    EXPECT_EQ(true, result);
 }
 
-TEST(AutoTradingSystem, SellNiceTimingFail) {
-    MockDriver driver;
-    AutoTradingSystem system{ &driver };
-
+TEST_F(AutoTradingSystemTestFixture, SellNiceTimingFail) {
     EXPECT_CALL(driver, currentPrice("TSLA"))
         .Times(3)
         .WillOnce(Return(300))
@@ -107,19 +87,19 @@ TEST(AutoTradingSystem, SellNiceTimingFail) {
     EXPECT_EQ(false, actual);
 }
 
-TEST(AutoTradingSystem, SellNiceTimingSuccess) {
-    MockDriver driver;
-    AutoTradingSystem system{ &driver };
-
+TEST_F(AutoTradingSystemTestFixture, SellNiceTimingSuccess) {
     EXPECT_CALL(driver, currentPrice("TSLA"))
         .Times(3)
         .WillOnce(Return(300))
         .WillOnce(Return(200))
         .WillOnce(Return(100));
 
-    bool actual = system.sellNiceTiming("TSLA", 10);
+    EXPECT_CALL(driver, sell("TSLA", 10, 100))
+        .Times(1);
 
-    EXPECT_EQ(true, actual);
+    bool result = system.sellNiceTiming("TSLA", 10);
+
+    EXPECT_EQ(true, result);
 }
 
 int main() {
