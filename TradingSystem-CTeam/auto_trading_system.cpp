@@ -24,8 +24,8 @@ public:
         return false;
     }
 
-    bool sell(const std::string& stockCode, int count, int price) {
-        return false;
+    void sell(const std::string& stockCode, int count, int price) {
+        m_driver->sell(stockCode, count, price);
     }
 
     int getPrice(const std::string& stockCode) {

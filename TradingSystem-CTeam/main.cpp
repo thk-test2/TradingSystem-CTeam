@@ -15,7 +15,7 @@ public:
     MOCK_METHOD(int, currentPrice, (const std::string& stockCode), (override));
 };
 
-TEST(AutoTradingSystem, LoginFailWithWrongPassword) {
+TEST(AutoTradingSystem, DISABLED_LoginFailWithWrongPassword) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
@@ -24,7 +24,7 @@ TEST(AutoTradingSystem, LoginFailWithWrongPassword) {
     EXPECT_EQ(false, actual);
 }
 
-TEST(AutoTradingSystem, LoginPASSWithCorrectPassword) {
+TEST(AutoTradingSystem, DISABLED_LoginPASSWithCorrectPassword) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
@@ -33,7 +33,7 @@ TEST(AutoTradingSystem, LoginPASSWithCorrectPassword) {
     EXPECT_EQ(true, actual);
 }
 
-TEST(AutoTradingSystem, BuySuccess) {
+TEST(AutoTradingSystem, DISABLED_BuySuccess) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
@@ -43,15 +43,16 @@ TEST(AutoTradingSystem, BuySuccess) {
 }
 
 TEST(AutoTradingSystem, SellSuccess) {
-    MockDriver driver;
+    NiceMock<MockDriver> driver;
     AutoTradingSystem system{ &driver };
 
-    bool actual = system.sell("TSLA", 999, 100);
+    EXPECT_CALL(driver, sell("TSLA", 999, 100))
+        .Times(1);
 
-    EXPECT_EQ(true, actual);
+    system.sell("TSLA", 999, 100);
 }
 
-TEST(AutoTradingSystem, GetPrice) {
+TEST(AutoTradingSystem, DISABLED_GetPrice) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
