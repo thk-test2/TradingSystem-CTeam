@@ -15,7 +15,7 @@ public:
     MOCK_METHOD(int, currentPrice, (const std::string& stockCode), (override));
 };
 
-TEST(AutoTradingSystem, zzLoginFailWithWrongPassword) {
+TEST(AutoTradingSystem, LoginFailWithWrongPassword) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
