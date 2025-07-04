@@ -8,6 +8,9 @@ public:
 	void login(const string& ID, const string& password) override {
 		kiwerAPI.login(ID, password);
 	}
+	void buy(const std::string& stockCode, int count, int price) {
+		kiwerAPI.buy(stockCode, count, price);
+	}
 private:
 	KiwerAPI kiwerAPI;
 };
