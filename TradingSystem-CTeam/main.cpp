@@ -29,9 +29,10 @@ TEST(AutoTradingSystem, BuySuccess) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
-    bool actual = system.buy("TSLA", 999, 100);
+    EXPECT_CALL(driver, buy(_, _, _))
+        .Times(1);
 
-    EXPECT_EQ(true, actual);
+    system.buy("TSLA", 999, 100);
 }
 
 TEST(AutoTradingSystem, SellSuccess) {

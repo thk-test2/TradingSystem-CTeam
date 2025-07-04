@@ -1,4 +1,3 @@
-
 #include <string>
 #include <exception>
 #include <thread>
@@ -24,8 +23,8 @@ public:
         m_driver->login(id, password);
     }
 
-    bool buy(const std::string& stockCode, int count, int price) {
-        return false;
+    void buy(const std::string& stockCode, int count, int price) {
+        m_driver->buy(stockCode, count, price);
     }
 
     bool sell(const std::string& stockCode, int count, int price) {
