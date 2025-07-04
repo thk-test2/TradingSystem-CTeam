@@ -1,12 +1,11 @@
+#pragma once
+
 #include <string>
 #include <exception>
 #include <thread>
 #include <chrono>
 #include <vector>
 #include <windows.h>
-
-const int MIN_STOCK_PRICE = 5000;
-const int MAX_STOCK_PRICE = 6000;
 
 class DriverNullPointerException : public std::exception {
 public:
@@ -35,7 +34,7 @@ class AutoTradingSystem {
 public:
     AutoTradingSystem(StockBrokerDriverInterface* driver) : m_driver{ driver } {}
 
-    void selectStockBrocker(std::string name) {}
+    void selectStockBrocker(std::string name) { }
 
     void login(const std::string& id, const std::string& password) {
         if (isDriverNullPointer()) throw DriverNullPointerException();
@@ -75,8 +74,8 @@ public:
     bool sellNiceTiming(const std::string& stockCode, int numOfStocks) {
         if (isDriverNullPointer()) throw std::exception();
 
-        int order_price= 0 ;
-        if (! isSellTimingAndGetOrderPrice(stockCode, order_price)) {
+        int order_price = 0;
+        if (!isSellTimingAndGetOrderPrice(stockCode, order_price)) {
             return false;
         }
         this->sell(stockCode, numOfStocks, order_price);
@@ -84,13 +83,17 @@ public:
     }
 
 private:
-    bool isValidPrice(int price)
-    {
+    StockBrokerDriverInterface* m_driver = nullptr;
+
+    const int MAX_BUY_CHECK_COUNT = 3;
+    const int MIN_STOCK_PRICE = 5000;
+    const int MAX_STOCK_PRICE = 6000;
+
+    bool isValidPrice(int price) {
         return (price >= MIN_STOCK_PRICE && price < MAX_STOCK_PRICE);
     }
 
-    bool isDriverNullPointer()
-    {
+    bool isDriverNullPointer() {
         return m_driver == nullptr;
     }
 
@@ -107,13 +110,11 @@ private:
         return true;
     }
 
-    bool isBuyTiming(int* currentPrice, const std::string& stockCode)
-    {
+    bool isBuyTiming(int* currentPrice, const std::string& stockCode) {
         int previousPrice = 0;
         int increaseCount = 0;
 
-        for (int checkCnt = 0; checkCnt < MAX_BUY_CHECK_COUNT; checkCnt++)
-        {
+        for (int checkCnt = 0; checkCnt < MAX_BUY_CHECK_COUNT; checkCnt++) {
             *currentPrice = m_driver->currentPrice(stockCode);
             if (checkCnt == 0) {
                 previousPrice = *currentPrice;
@@ -134,7 +135,4 @@ private:
         int count = price / currentPrice;
         m_driver->buy(stockCode, count, currentPrice);
     }
-
-    StockBrokerDriverInterface* m_driver;
-	const int MAX_BUY_CHECK_COUNT = 3;
 };
