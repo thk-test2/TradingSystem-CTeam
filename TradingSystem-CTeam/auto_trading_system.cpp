@@ -16,8 +16,8 @@ public:
 
     void selectStockBrocker(std::string name) {}
 
-    bool login(const std::string& id, const std::string& password) {
-        return false;
+    void login(const std::string& id, const std::string& password) {
+        m_driver->login(id, password);
     }
 
     bool buy(const std::string& stockCode, int count, int price) {
