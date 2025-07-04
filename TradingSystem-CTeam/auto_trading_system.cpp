@@ -29,7 +29,9 @@ public:
     }
 
     int getPrice(const std::string& stockCode) {
-        return 0;
+        if (m_driver == nullptr) return 0;
+
+        return m_driver->currentPrice(stockCode);
     }
 
     bool buyNiceTiming(const std::string& stockCode, int price) {
