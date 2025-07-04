@@ -1,5 +1,6 @@
 
 #include <string>
+#include <exception>
 
 //Interface Class
 class StockBrokerDriverInterface {
@@ -29,9 +30,14 @@ public:
     }
 
     int getPrice(const std::string& stockCode) {
-        if (m_driver == nullptr) return 0;
+        checkPrecondition();
 
         return m_driver->currentPrice(stockCode);
+    }
+
+    void checkPrecondition()
+    {
+        if (m_driver == nullptr) throw std::exception();
     }
 
     bool buyNiceTiming(const std::string& stockCode, int price) {
