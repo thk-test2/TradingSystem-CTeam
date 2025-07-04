@@ -30,14 +30,9 @@ public:
     }
 
     int getPrice(const std::string& stockCode) {
-        checkPrecondition();
+        if (!checkDriverIsSelected()) throw std::exception();
 
         return m_driver->currentPrice(stockCode);
-    }
-
-    void checkPrecondition()
-    {
-        if (m_driver == nullptr) throw std::exception();
     }
 
     bool buyNiceTiming(const std::string& stockCode, int price) {
@@ -49,5 +44,10 @@ public:
     }
 
 private:
+    bool checkDriverIsSelected()
+    {
+        return m_driver != nullptr;
+    }
+
     StockBrokerDriverInterface* m_driver;
 };
