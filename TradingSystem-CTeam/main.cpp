@@ -3,7 +3,6 @@
 #include "gmock/gmock.h"
 
 #include "auto_trading_system.cpp"
-#include "kiwer_driver.cpp"
 
 using namespace testing;
 
@@ -19,12 +18,17 @@ public:
 class AutoTradingSystemTestFixture : public ::testing::Test {
 public:
     NiceMock<MockDriver> mockDriver;
-    NiceMock<KiwerDriver> kiwerDriver;
     AutoTradingSystem system{ &mockDriver };
 };
 
-TEST_F(AutoTradingSystemTestFixture, SelectStockBrockerKiwer) {
-    system.selectStockBrocker(&kiwerDriver);
+TEST_F(AutoTradingSystemTestFixture, SelectStockBrockerFail) {
+    EXPECT_THROW(system.selectStockBrocker("invalid_name"),
+        std::invalid_argument);
+}
+
+TEST_F(AutoTradingSystemTestFixture, SelectStockBrockerSuccess) {
+    EXPECT_NO_THROW(system.selectStockBrocker("kiwer"));
+    EXPECT_NO_THROW(system.selectStockBrocker("nemo"));
 }
 
 TEST_F(AutoTradingSystemTestFixture, LoginPASS) {

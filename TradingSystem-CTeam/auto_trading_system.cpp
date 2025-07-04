@@ -34,9 +34,7 @@ class AutoTradingSystem {
 public:
     AutoTradingSystem(StockBrokerDriverInterface* driver) : m_driver{ driver } {}
 
-    void selectStockBrocker(StockBrokerDriverInterface* driver) {
-        m_driver = driver;
-    }
+    void selectStockBrocker(std::string name) { }
 
     void login(const std::string& id, const std::string& password) {
         if (isDriverNullPointer()) throw DriverNullPointerException();
