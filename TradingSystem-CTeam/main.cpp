@@ -70,6 +70,24 @@ TEST(StockBroker, SellSuccess) {
     EXPECT_EQ(true, actual);
 }
 
+TEST(StockBroker, GetPriceKiwer) {
+    StockBrocker sb;
+    sb.selectStockBrocker("kiwer");
+
+    int actual = sb.getPrice("TSLA");
+
+    EXPECT_EQ(999, actual);
+}
+
+TEST(StockBroker, GetPriceNemo) {
+    StockBrocker sb;
+    sb.selectStockBrocker("nemo");
+
+    int actual = sb.getPrice("TSLA");
+
+    EXPECT_EQ(999, actual);
+}
+
 int main() {
     ::testing::InitGoogleMock();
     return RUN_ALL_TESTS();
