@@ -54,6 +54,22 @@ TEST(StockBroker, LoginPASSWithCorrectPassword) {
     EXPECT_EQ(true, actual);
 }
 
+TEST(StockBroker, BuySuccess) {
+    StockBrocker sb;
+
+    bool actual = sb.buy("TSLA", 999, 100);
+
+    EXPECT_EQ(true, actual);
+}
+
+TEST(StockBroker, SellSuccess) {
+    StockBrocker sb;
+
+    bool actual = sb.sell("TSLA", 9999, 50);
+
+    EXPECT_EQ(true, actual);
+}
+
 int main() {
     ::testing::InitGoogleMock();
     return RUN_ALL_TESTS();
