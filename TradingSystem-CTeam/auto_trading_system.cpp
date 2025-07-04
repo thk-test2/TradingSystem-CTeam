@@ -44,14 +44,12 @@ public:
     bool sellNiceTiming(const std::string& stockCode, int numOfStocks) {
         if (!checkDriverIsSelected()) throw std::exception();
 
-        std::vector<int> prices = getPrice3Times(stockCode);
-
-        if (isSellTiming(prices)) {
-            this->sell(stockCode, numOfStocks, prices[2]);
-            return true;
+        int order_price= 0 ;
+        if (! isSellTimingAndGetOrderPrice(stockCode, order_price)) {
+            return false;
         }
-
-        return false;
+        this->sell(stockCode, numOfStocks, order_price);
+        return true;
     }
 
 private:
@@ -60,23 +58,17 @@ private:
         return m_driver != nullptr;
     }
 
-    std::vector<int> getPrice3Times(const std::string& stockCode)
-    {
-        std::vector<int> result;
-        for (int i = 0; i < 3; i++) {
+    bool isSellTimingAndGetOrderPrice(const std::string& stockCode, int& order_price) {
+        int next_price = m_driver->currentPrice(stockCode);
+        int prev_price;
+        for (int i = 0; i < 2; i++) {
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
-            result.push_back(m_driver->currentPrice(stockCode));
+            prev_price = next_price;
+            next_price = m_driver->currentPrice(stockCode);
+            if (prev_price <= next_price) return false;
         }
-        return result;
-    }
-
-    bool isSellTiming(const std::vector<int>& prices) {
-        if (prices[0] > prices[1]) {
-            if (prices[1] > prices[2]) {
-                return true;
-            }
-        }
-        return false;
+        order_price = next_price;
+        return true;
     }
 
     StockBrokerDriverInterface* m_driver;
