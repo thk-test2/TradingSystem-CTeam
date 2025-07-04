@@ -15,7 +15,7 @@ public:
     MOCK_METHOD(int, currentPrice, (const std::string& stockCode), (override));
 };
 
-TEST(AutoTradingSystem, DISABLED_LoginFailWithWrongPassword) {
+TEST(AutoTradingSystem, zzLoginFailWithWrongPassword) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
@@ -24,7 +24,7 @@ TEST(AutoTradingSystem, DISABLED_LoginFailWithWrongPassword) {
     EXPECT_EQ(false, actual);
 }
 
-TEST(AutoTradingSystem, DISABLED_LoginPASSWithCorrectPassword) {
+TEST(AutoTradingSystem, LoginPASSWithCorrectPassword) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
@@ -33,7 +33,7 @@ TEST(AutoTradingSystem, DISABLED_LoginPASSWithCorrectPassword) {
     EXPECT_EQ(true, actual);
 }
 
-TEST(AutoTradingSystem, DISABLED_BuySuccess) {
+TEST(AutoTradingSystem, BuySuccess) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
@@ -52,7 +52,7 @@ TEST(AutoTradingSystem, SellSuccess) {
     system.sell("TSLA", 999, 100);
 }
 
-TEST(AutoTradingSystem, DISABLED_GetPrice) {
+TEST(AutoTradingSystem, GetPrice) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
