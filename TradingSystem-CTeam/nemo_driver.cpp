@@ -14,6 +14,10 @@ public:
 	void sell(const std::string& stockCode, int count, int price) {
 		nemoAPI.sellingStock(stockCode, count, price);
 	}
+	int currentPrice(const std::string& stockCode) {
+		return nemoAPI.getMarketPrice(stockCode, 0);
+	};
+
 private:
 	NemoAPI nemoAPI;
 };

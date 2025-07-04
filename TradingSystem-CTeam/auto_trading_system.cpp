@@ -3,6 +3,7 @@
 #include <thread>
 #include <chrono>
 #include <vector>
+#include <windows.h>
 
 const int MIN_STOCK_PRICE = 5000;
 const int MAX_STOCK_PRICE = 6000;
