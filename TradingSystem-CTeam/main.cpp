@@ -38,6 +38,22 @@ TEST(StockBroker, SelectStockBrokerNemo) {
     EXPECT_EQ("nemo", actual);
 }
 
+TEST(StockBroker, LoginFailWithWrongPassword) {
+    StockBrocker sb;
+
+    bool actual = sb.login("FAKE_USER", "WRONG_PASSWORD");
+
+    EXPECT_EQ(false, actual);
+}
+
+TEST(StockBroker, LoginPASSWithCorrectPassword) {
+    StockBrocker sb;
+
+    bool actual = sb.login("FAKE_USER", "CORRECT_PASSWORD");
+
+    EXPECT_EQ(true, actual);
+}
+
 int main() {
     ::testing::InitGoogleMock();
     return RUN_ALL_TESTS();
