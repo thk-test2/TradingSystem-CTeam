@@ -4,17 +4,17 @@
 const int MIN_STOCK_PRICE = 5000;
 const int MAX_STOCK_PRICE = 6000;
 
-class DriverInterfacePointerException : public std::exception {
+class DriverNullPointerException : public std::exception {
 public:
     const char* what() const noexcept override {
-        return "invalid DriverInterfacePointerException!";
+        return "invalid DriverNullPointerException - NULL Pointer!";
     }
 };
 
-class PriceOutOfRangeException : public std::exception {
+class ValidPriceException : public std::exception {
 public:
     const char* what() const noexcept override {
-        return "invalid PriceOutOfRangeException Price Range should be 5000~6000 !";
+        return "invalid ValidPriceException - Price Range should be 5000~6000 !";
     }
 };
 
@@ -34,26 +34,26 @@ public:
     void selectStockBrocker(std::string name) {}
 
     void login(const std::string& id, const std::string& password) {
-        if (!checkDriverIsSelected()) throw DriverInterfacePointerException();
+        if (isDriverNullPointer()) throw DriverNullPointerException();
         m_driver->login(id, password);
     }
 
     void buy(const std::string& stockCode, int count, int price) {
-        if (!checkDriverIsSelected()) throw DriverInterfacePointerException();
+        if (isDriverNullPointer()) throw DriverNullPointerException();
         m_driver->buy(stockCode, count, price);
     }
 
     void sell(const std::string& stockCode, int count, int price) {
-        if (!checkDriverIsSelected()) throw DriverInterfacePointerException();
+        if (isDriverNullPointer()) throw DriverNullPointerException();
         m_driver->sell(stockCode, count, price);
     }
 
     int getPrice(const std::string& stockCode) {
-        if (!checkDriverIsSelected()) throw DriverInterfacePointerException();
+        if (isDriverNullPointer()) throw DriverNullPointerException();
 
         int price = m_driver->currentPrice(stockCode);
 
-        //if (checkDriverIsValidPrice(price)) throw PriceOutOfRangeException();
+        //if (isValidPrice(price)) throw ValidPriceException();
 
         return price;
     }
@@ -67,14 +67,14 @@ public:
     }
 
 private:
-    bool checkDriverIsValidPrice(int price)
+    bool isValidPrice(int price)
     {
         return (price >= MIN_STOCK_PRICE && price < MAX_STOCK_PRICE);
     }
 
-    bool checkDriverIsSelected()
+    bool isDriverNullPointer()
     {
-        return m_driver != nullptr;
+        return m_driver == nullptr;
     }
 
     StockBrokerDriverInterface* m_driver;
