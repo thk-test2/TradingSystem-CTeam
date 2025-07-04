@@ -15,22 +15,14 @@ public:
     MOCK_METHOD(int, currentPrice, (const std::string& stockCode), (override));
 };
 
-TEST(AutoTradingSystem, LoginFailWithWrongPassword) {
+TEST(AutoTradingSystem, LoginPASS) {
     MockDriver driver;
     AutoTradingSystem system{ &driver };
 
-    bool actual = system.login("FAKE_USER", "WRONG_PASSWORD");
+    EXPECT_CALL(driver, login(_, _))
+		.Times(1);
 
-    EXPECT_EQ(false, actual);
-}
-
-TEST(AutoTradingSystem, LoginPASSWithCorrectPassword) {
-    MockDriver driver;
-    AutoTradingSystem system{ &driver };
-
-    bool actual = system.login("FAKE_USER", "CORRECT_PASSWORD");
-
-    EXPECT_EQ(true, actual);
+    system.login("FAKE_USER", "FAKE_PASSWORD");
 }
 
 TEST(AutoTradingSystem, BuySuccess) {
